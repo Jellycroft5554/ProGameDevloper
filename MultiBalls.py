@@ -21,32 +21,31 @@ class Ball:
         pos = (self.x, self.y)
         screen.draw.filled_circle(pos, self.radius, CLR)
 
-ball = Ball(50,100)
+    def update(self,dt):
+        # Apply constant acceleration formulae
+        uy = self.vy
+        self.vy += GRAVITY * dt
+        self.y += (uy + self.vy) * 0.5 * dt
 
-ball2= Ball(70,150)
+        # Detect and handle the bounce
+        if self.y > HEIGHT - self.radius:
+            self.y = HEIGHT - self.radius
+            self.vy = -self.vy * 0.9
+    
+        self.x += self.vx * dt
+        if self.x > WIDTH-self.radius or self.x < self.radius:
+            self.vx = -self.vx
+
+    def kick(self,click):
+        self.vy = click
+
+ball=Ball(50,100)
+ball2=Ball(200,100)
 
 def draw():
     screen.clear()
     ball.draw()
     ball2.draw()
-
-def update(self,dt):
-    # Apply constant acceleration formulae
-    uy = self.vy
-    self.vy += GRAVITY * dt
-    self.y += (uy + self.vy) * 0.5 * dt
-
-    # Detect and handle the bounce
-    if self.y > HEIGHT - self.radius:
-        self.y = HEIGHT - self.radius
-        self.vy = -self.vy * 0.9
-    
-    self.x += self.vx * dt
-    if self.x > WIDTH-self.radius or self.x < self.radius:
-        self.vx = -self.vx
-
-def kick(self,click):
-    self.vy = click
 
 def update(dt):
     ball.update(dt)
@@ -54,8 +53,7 @@ def update(dt):
 
 def on_key_down(key):
     if key==keys.SPACE:
-        ball.kick(-500)
-        ball2.kick(-300)
+         ball.kick(-500)
+         ball2.kick(-300)
 
- 
 pgzrun.go()
