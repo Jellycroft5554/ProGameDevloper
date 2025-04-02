@@ -1,7 +1,7 @@
 import pygame
 pygame.init()
 
-screen=pygame.display.set_mode([900,900])
+screen=pygame.display.set_mode([1500,1000])
 
 R=255,0,0
 G=0,255,0
@@ -28,7 +28,7 @@ class Circle():
         self.radius += x
         pygame.draw.circle(self.screen,self.color,self.position,self.radius,self.wid)
 
-position=(450,450)
+position=(400,450)
 radius=50
 wid=0
 
@@ -42,6 +42,20 @@ circle4=Circle(screen,BL,position,radius+30,0)
 circle5=Circle(screen,R,position,radius+100,3)
 circle6=Circle(screen,P,position,radius,10)
 
+position2=(1100,450)
+radius2=200
+wid2=0
+
+pygame.draw.circle(screen,R,position2,radius2+200,wid)
+pygame.display.update()
+
+ccircle1=Circle(screen,R,position2,radius2+30,2)
+ccircle2=Circle(screen,B,position2,radius2+40,20)
+ccircle3=Circle(screen,G,position2,radius2+30,0)
+ccircle4=Circle(screen,BL,position2,radius2+30,0)
+ccircle5=Circle(screen,R,position2,radius2+30,3)
+ccircle6=Circle(screen,P,position2,radius2,10)
+
 running=True 
 while running:
     for event in pygame.event.get():
@@ -54,6 +68,12 @@ while running:
             circle4.draw()
             circle5.draw()
             circle6.draw()
+            ccircle1.draw()
+            ccircle2.draw()
+            ccircle3.draw()
+            ccircle4.draw()
+            ccircle5.draw()
+            ccircle6.draw()
             pygame.display.update()
         elif (event.type==pygame.MOUSEBUTTONUP):
             circle1.grow(10)
@@ -62,6 +82,12 @@ while running:
             circle4.grow(30)
             circle5.grow(-10)
             circle6.grow(10)
+            ccircle1.grow(-20)
+            ccircle2.grow(-30)
+            ccircle3.grow(-20)
+            ccircle4.grow(-30)
+            ccircle5.grow(-15)
+            ccircle6.grow(+10)
             pygame.display.update()
 
 pygame.quit()
