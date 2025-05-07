@@ -6,7 +6,7 @@ pygame.font.init()
 
 WIDTH,HEIGHT=1000,700
 
-win=pygame.display.setmode((WIDTH,HEIGHT))
+win=pygame.display.set_mode((WIDTH,HEIGHT))
 caption=pygame.display.set_caption("Space Invaders!")
 
 WHITE=(255,255,255)
@@ -16,8 +16,8 @@ YELLOW=(255,255,0)
 
 border=pygame.Rect(WIDTH//2-5,0,10,HEIGHT)
 
-bullet_hit_sound=pygame.mixer.Sound("C:\\Users\\ryani_jvpdg6k\\OneDrive\\Desktop\\Coding\\PRO GAME DEVLOPER\\1.DrawLines.py\\space invaders\\Grenade+1.mp3")
-bullet_fire_sound=pygame.mixer.Sound("Gun+Silencer.mp3")
+bullet_fire_sound=pygame.mixer.Sound("C:\\Users\\ryani_jvpdg6k\\OneDrive\\Desktop\\Coding\\PRO GAME DEVLOPER\\1.DrawLines.py\\space invaders\\Grenade.mp3")
+bullet_hit_sound=pygame.mixer.Sound("C:\\Users\\ryani_jvpdg6k\\OneDrive\\Desktop\\Coding\\PRO GAME DEVLOPER\\1.DrawLines.py\\space invaders\\Gun+Silencer.mp3")
 
 heath_font=pygame.font.SysFont("Comicsans",30)
 winner_font=pygame.font.SysFont("Comicsans",100)
@@ -37,7 +37,7 @@ red_spaceship=pygame.transform.rotate(pygame.transform.scale(red_image,(spaceshi
 yellow_image=pygame.image.load(os.path.join("space invaders","rocket2.png"))
 yellow_spaceship=pygame.transform.rotate(pygame.transform.scale(yellow_image,(spaceship_w,spaceship_h)),270)
 
-space=pygame.tranform.scale(pygame.image.load(os.path.join("space invaders","space.png")),(WIDTH,HEIGHT))
+space=pygame.transform.scale(pygame.image.load(os.path.join("space invaders","space.png")),(WIDTH,HEIGHT))
 
 def draw_window(RED,YELLOW,RED_BULLETS,YELLOW_BULLETS,RED_HEALTH,YELLOW_HEALTH):
     win.blit(space,(0,0))
@@ -46,8 +46,8 @@ def draw_window(RED,YELLOW,RED_BULLETS,YELLOW_BULLETS,RED_HEALTH,YELLOW_HEALTH):
     YELLOW_HEALTH_TEXT=heath_font.render("Health"+str(YELLOW_HEALTH),1,WHITE)
     win.blit(RED_HEALTH_TEXT,(WIDTH-RED_HEALTH_TEXT.get_width()-10,10))
     win.blit(YELLOW_HEALTH_TEXT,(10,10))
-    win.blit(red_spaceship,(red.x,red.y))
-    win.blit(yellow_spaceship,(yellow.x,yellow.y))
+    win.blit(red_spaceship,(RED.x,RED.y))
+    win.blit(yellow_spaceship,(YELLOW.x,YELLOW.y))
 
     for bullet in RED_BULLETS:
         pygame.draw.rect(win,RED,bullet)
@@ -103,3 +103,62 @@ def draw_winner(text):
 def main():
     red=pygame.Rect(900,300,spaceship_w,spaceship_h)
     yellow=pygame.Rect(100,300,spaceship_w,spaceship_h)
+
+    red_bullets=[]
+    yellow_bullets=[]
+
+    red_health=10
+    yellow_health=10
+
+    clock=pygame.time.Clock()
+
+    running=True
+    while running:
+        clock.tick(fps)
+        for event in pygame.event.get():
+            if event.type==pygame.QUIT:
+                running=False
+                pygame.quit()
+            if event.type==pygame.KEYDOWN:
+                if event.key==pygame.K_LCTRL and len(yellow_bullets) < maxb:
+                    bullet=pygame.Rect(yellow.x + yellow.width, yellow.y + yellow.height // 2 -2, 10,5)
+                    yellow_bullets.append(bullet)
+                    bullet_fire_sound.play()
+
+                elif event.key==pygame.K_RCTRL and len(red_bullets) < maxb:
+                    bullet=pygame.Rect(red.x + red.width, red.y + red.height // 2 -2, 10,5)
+                    red_bullets.append(bullet)
+                    bullet_fire_sound.play()
+
+            if event.type==red_hit:
+                red_health -= 1
+                bullet_hit_sound.play()
+
+            if event.type==yellow_hit:
+                yellow_health -= 1
+                bullet_hit_sound.play()
+
+        winner_text=""
+
+        if red_health <= 0:
+            winner_text="YELLOW WINS!"
+        
+        if yellow_health <= 0:
+            winner_text="RED WINS!"
+
+        if winner_text != "":
+            draw_winner(winner_text)
+            break
+
+        keys_pressed=pygame.key.get_pressed()
+        yellow_handle_movement(keys_pressed,yellow)
+        red_handle_movement(keys_pressed,red)
+
+        handle_bullets(yellow_bullets,red_bullets,yellow,red)
+
+        draw_window(red,yellow,red_bullets,yellow_bullets,red_health,yellow_health)
+
+main()
+
+if __name__ == "__main__":
+    main()
