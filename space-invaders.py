@@ -58,23 +58,23 @@ def draw_window(RED,YELLOW,RED_BULLETS,YELLOW_BULLETS,RED_HEALTH,YELLOW_HEALTH):
 pygame.display.update()
 
 def yellow_handle_movement(keys_pressed,yellow):
-    if keys_pressed[pygame.K_a] and [yellow.x-vs>0]:
+    if keys_pressed[pygame.K_a] and yellow.x-vs>0:
         yellow.x-=vs
-    if keys_pressed[pygame.K_d] and [yellow.x+vs+yellow.width<border.x]:
+    if keys_pressed[pygame.K_d] and yellow.x+vs+yellow.width<border.x:
         yellow.x+=vs
-    if keys_pressed[pygame.K_w] and [yellow.y-vs>0]:
+    if keys_pressed[pygame.K_w] and yellow.y-vs>0:
         yellow.y-=vs
-    if keys_pressed[pygame.K_s] and [yellow.y+vs+yellow.height<HEIGHT-10]:
+    if keys_pressed[pygame.K_s] and yellow.y+vs+yellow.height<HEIGHT-10:
         yellow.y+=vs
 
 def red_handle_movement(keys_pressed,red):
-    if keys_pressed[pygame.K_RIGHT] and [red.x+vs+red.width<border.x]:
+    if keys_pressed[pygame.K_RIGHT] and red.x+vs+red.width<border.x:
         red.x-=vs
-    if keys_pressed[pygame.K_LEFT] and [red.x-vs>border.x+border.width]:
+    if keys_pressed[pygame.K_LEFT] and red.x-vs>border.x+border.width:
         red.x+=vs
-    if keys_pressed[pygame.K_UP] and [red.y-vs>0]:
+    if keys_pressed[pygame.K_UP] and red.y-vs>0:
         red.y-=vs
-    if keys_pressed[pygame.K_DOWN] and [red.y+vs+red.height<HEIGHT-10]:
+    if keys_pressed[pygame.K_DOWN] and red.y+vs+red.height<HEIGHT-10 :
         red.y+=vs 
 
 def handle_bullets(YELLOW_BULLETS,RED_BULLETS,YELLOW,RED):
@@ -87,7 +87,7 @@ def handle_bullets(YELLOW_BULLETS,RED_BULLETS,YELLOW,RED):
             YELLOW_BULLETS.remove(BULLET)
 
     for BULLET in RED_BULLETS:
-        BULLET.x += vs
+        BULLET.x -= vs
         if YELLOW.colliderect(BULLET):
             pygame.event.post(pygame.event.Event(yellow_hit))
             RED_BULLETS.remove(BULLET)
@@ -96,7 +96,7 @@ def handle_bullets(YELLOW_BULLETS,RED_BULLETS,YELLOW,RED):
 
 def draw_winner(text):
     draw_text=winner_font.render(text,1,WHITE)
-    win.blit(draw_text(WIDTH/2,HEIGHT/2))
+    win.blit(draw_text,(WIDTH/2,HEIGHT/2))
     pygame.display.update()
     pygame.time.delay(5000)
 
@@ -157,8 +157,6 @@ def main():
         handle_bullets(yellow_bullets,red_bullets,yellow,red)
 
         draw_window(red,yellow,red_bullets,yellow_bullets,red_health,yellow_health)
-
-main()
 
 if __name__ == "__main__":
     main()
