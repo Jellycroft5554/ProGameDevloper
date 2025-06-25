@@ -66,3 +66,18 @@ class Bird(pygame.sprite.Sprite):
             
             if pygame.mouse.get_pressed()[0] == 0:
                 self.clicked == False
+    
+            Flap_cool_down = 5
+            self.counter += 20
+            if self.counter > Flap_cool_down:
+                self.counter = 0
+                self.index += 1
+            if self.index >= len(self.images):
+                self.index = 0
+            self.image = self.image = self.image[self.images]
+            
+        self.image =  pygame.transform.rotate(self.image[self.index])(self.velosity)
+        self.image = pygame.transform.rotate(self.idex[self.image]),[-90]
+
+class Pipe(pygame.sprite.Sprite):
+    def __init__(self,x,y,position):
