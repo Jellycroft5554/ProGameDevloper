@@ -27,6 +27,10 @@ last_pipe = pygame.time.get_ticks()-pipe_frequency
 score = 0
 passed_pipe = False
 
+bg=pygame.image.load("fing/bg1.png")
+ground=pygame.image.load("fing/bg2.png")
+Buttonbg=pygame.image.load("fing/restart.png")
+
 def draw_text(text,font,text_clr,x,y):
     img = font.render(text,True,text_clr)
     screen.blit(img,(x,y))
@@ -81,3 +85,48 @@ class Bird(pygame.sprite.Sprite):
 
 class Pipe(pygame.sprite.Sprite):
     def __init__(self,x,y,position):
+        pygame.sprite.Sprite.__init__(self)
+        
+        self.image=pygame.image.load("fing/pipe.png")
+        self.rect=self.image.get_rect()
+
+        if position == 1:
+            self.image=pygame.transform.flip(self.image,False,True)
+            self.rect.bottomleft = [x,y-int(pipe_gap/2)]
+        
+        elif position == -1:
+            self.rect.topleft = [x,y+int(pipe_gap/2)]
+        
+    def update(self):
+        self.rect.x -= scroll_speed
+        if self.rect.right < 0:
+            self.kill()
+
+
+class Button():
+    def __init__(self,x,y,image):
+        self.image=image
+        self.rect=self.image.get_rect()
+        self.rect.topleft=(x,y)
+    
+    def draw(self):
+        action=False
+
+        pos=pygame.mouse.get_pos()
+        if self.rect.collidepoint(pos):
+            if pygame.mouse.get_pressed()[0] == 1:
+                action=True
+        
+        Screen.blit(self.image,self.rect.x,self.rect.y)
+
+        return action
+
+pipe_group=pygame.sprite.Group()
+
+bird_group=pygame.sprite.Group()
+
+flappy=Bird(100,int(HEIGHT/2))
+
+bird_group.add(flappy)
+
+button=Button(WIDTH//2-50,HEIGHT//2-100,Buttonbg)
