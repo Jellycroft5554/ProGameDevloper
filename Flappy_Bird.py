@@ -13,6 +13,7 @@ pygame.display.set_caption("Flappy Bird")
 font = pygame.font.SysFont("Comic Sans ms",30)
 
 red = (255,0,0)
+black = (255,255,255)
 
 ground_scroll = 0
 scroll_speed = 4
@@ -120,9 +121,9 @@ class Button():
         Screen.blit(self.image,self.rect.x,self.rect.y)
 
         return action
-
+ 
 pipe_group=pygame.sprite.Group()
-
+ 
 bird_group=pygame.sprite.Group()
 
 flappy=Bird(100,int(HEIGHT/2))
@@ -130,3 +131,33 @@ flappy=Bird(100,int(HEIGHT/2))
 bird_group.add(flappy)
 
 button=Button(WIDTH//2-50,HEIGHT//2-100,Buttonbg)
+
+run = True
+while run:
+    clock.tick(fps)
+    Screen.blit(bg,(0,0))
+    pipe_group.draw(Screen)
+    bird_group.draw(Screen)
+    bird_group.update()
+    Screen.blit(ground,(ground_scroll,700))
+    
+    if len(pipe_group) > 0:
+        if bird_group.sprites()[0].rect.left > pipe_group.sprites()[0].rect.left:
+            if bird_group.sprites()[0].rect.right < pipe_group.sprites()[0].rect.right and passed_pipe == False:
+                passed_pipe = True
+
+    if passed_pipe == True:
+        if bird_group.sprites()[0].rect.left > pipe_group.sprites()[0].rect.right:
+            score += 1
+            passed_pipe = False
+
+    draw_text(f"Score:"+str(score),font,black,WIDTH-200,50)
+
+    if pygame.sprite.groupcollide(bird_group,pipe_group,False,False) or flappy.rect.top < 0:
+        game_over = True
+    
+    if flappy.rect.bottom >= 768:
+        game_over = True
+        flying + False
+
+pygame.quit()
