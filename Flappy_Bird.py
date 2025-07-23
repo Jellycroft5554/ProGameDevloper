@@ -8,7 +8,7 @@ fps = 60
 
 WIDTH = 1100
 HEIGHT = 800
-Screen = pygame.display.set_mode(WIDTH,HEIGHT)
+Screen = pygame.display.set_mode((WIDTH,HEIGHT))
 pygame.display.set_caption("Flappy Bird")
 font = pygame.font.SysFont("Comic Sans ms",30)
 
@@ -79,10 +79,10 @@ class Bird(pygame.sprite.Sprite):
                 self.index += 1
             if self.index >= len(self.images):
                 self.index = 0
-            self.image = self.image = self.image[self.images]
+            self.image = [self.index]
             
-        self.image =  pygame.transform.rotate(self.image[self.index])(self.velosity)
-        self.image = pygame.transform.rotate(self.idex[self.image]),[-90]
+        self.image =  pygame.transform.rotate(self.image[self.index],self.vs * -2)
+        self.image = pygame.transform.rotate(self.image[self.index],-90)
 
 class Pipe(pygame.sprite.Sprite):
     def __init__(self,x,y,position):
@@ -159,5 +159,38 @@ while run:
     if flappy.rect.bottom >= 768:
         game_over = True
         flying + False
+    
+    if flying == True and game_over == False:
+        time_now = pygame.time.get_ticks()
+        if time_now - last_pipe > pipe_frequency:
+            height_pipe = random.randint(-100,100)
+            bottom_pipe = Pipe(WIDTH,int(HEIGHT/2)+height_pipe,-1)
+            top_pipe = Pipe(WIDTH,int(HEIGHT/2)+height_pipe,1)
+            
+            pipe_group.add(bottom_pipe)
+            pipe_group.add(top_pipe)
+            last_pipe = time_now
+        
+        pipe_group.update()
+
+        ground_scroll -= scroll_speed
+
+        if abs(ground_scroll) > 35:
+            ground_scroll = 0
+            
+    if game_over == True:
+        if button.draw():
+            game_over = False
+            score = reset_game()
+    
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+
+        if event.type == pygame.MOUSEBUTTONDOWN and flying == False and game_over == False:
+            flying = True
+    
+    pygame.display.update()
+
 
 pygame.quit()
